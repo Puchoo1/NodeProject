@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>To-Do List</title>
+</head>
+<body>
+    <h1>To-Do List</h1>
+
+    <!-- Search Form -->
+    <form action="/search" method="GET">
+        <input type="text" name="q" placeholder="Search tasks">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Add Task Form -->
+    <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Title" required>
+        <textarea name="description" placeholder="Description"></textarea>
+        <input type="date" name="due_date">
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- Task List -->
+    <ul>
+        <% todos.forEach(todo => { %>
+            <li class="<%= todo.important ? 'important' : '' %>">
+                <h3><%= todo.title %></h3>
+                <p><%= todo.description %></p>
+                <p>Due: <%= todo.due_date || 'No due date' %></p>
+                <form action="/important/<%= todo.id %>" method="POST">
+                    <button type="submit"><%= todo.important ? 'Unmark' : 'Mark Important' %></button>
+                </form>
+                <form action="/delete/<%= todo.id %>" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        <% }); %>
+    </ul>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+    </div>
+</body>
+</html>
